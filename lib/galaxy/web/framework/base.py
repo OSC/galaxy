@@ -10,7 +10,7 @@ import tarfile
 import tempfile
 import time
 import types
-
+import re
 import routes
 import webob
 # We will use some very basic HTTP/wsgi utilities from the paste library
@@ -18,7 +18,7 @@ from paste import httpexceptions
 from paste.request import get_cookies
 from paste.response import HeaderDict
 from six.moves.http_cookies import SimpleCookie
-
+from galaxy.web.framework.middleware import external_redirect
 from galaxy.util import smart_str
 
 try:
@@ -441,6 +441,14 @@ class Response(object):
         """
         if "\n" in url or "\r" in url:
             raise httpexceptions.HTTPInternalServerError("Invalid redirect URL encountered.")
+        if "https" in url or "http" in url:
+            short_url = re.search("((http|https)\:\/\/)[a-zA-Z0-9\.\?\:@\-_=#-]+", url)
+            # url="https://google.com"
+            headers = self.wsgi_headeritems()
+            headers.append(('location', short_url.group()))
+            print headers
+            raise external_redirect.HTTPFound(detail=url, headers=headers)
+        print url
         raise httpexceptions.HTTPFound(url.encode('utf-8'), headers=self.wsgi_headeritems())
 
     def wsgi_headeritems(self):
