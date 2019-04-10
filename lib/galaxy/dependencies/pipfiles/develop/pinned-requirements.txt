@@ -18,6 +18,7 @@ nosehtml==0.4.4
 packaging==17.1
 pathtools==0.1.2
 pbr==4.0.2
+pbs_python
 pygithub3==0.5.1; python_version < '3'
 pygments==2.2.0
 pyparsing==2.2.0
