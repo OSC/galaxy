@@ -248,5 +248,5 @@ if [ $SKIP_CLIENT_BUILD -eq 0 ]; then
     fi
 else
     echo "Regenerating static plugin directories."
-    python ./scripts/plugin_staging.py
+    # python ./scripts/plugin_staging.py
 fi
